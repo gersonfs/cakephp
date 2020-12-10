@@ -2462,7 +2462,12 @@ class DboSource extends DataSource {
 				$this->logQuery('COMMIT');
 			}
 			$this->_transactionStarted = false;
-			return $this->_connection->commit();
+			try {
+				$this->_connection->commit();
+				return true;
+			}catch(\Exception $e) {
+				return false;
+			}
 		}
 
 		if ($this->nestedTransactionSupported()) {
